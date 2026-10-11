@@ -1,10 +1,9 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.db.supabase import supabase
+from app.db.supabase import supabase, supabase_admin
 from app.db.dependencies import get_access_token
 from app.api.advisor_api import router as advisor_router
-from app.db.supabase import supabase, supabase_admin
 from app.api.recommendations_api import router as recommendations_router
 from app.api.what_if import router as what_if_router
 from app.api.universities import router as universities_router

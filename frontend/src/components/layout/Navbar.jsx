@@ -5,7 +5,7 @@ import { useAuthStore } from "../../store/useAuthStore"; // import your auth sto
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const links = ["Home", "Explore", "About"];
+  const links = ["Home", "Explore"];
   const navigate = useNavigate();
 
   const { user, logout } = useAuthStore();

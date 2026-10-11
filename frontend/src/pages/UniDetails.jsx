@@ -134,8 +134,7 @@ const UniDetails = () => {
                   ),
                   label: "Accreditations",
                   value:
-                    selectedUniversities.accreditations ||
-                    "Not specified",
+                    "HEC"
                 },
                 {
                   icon: (
