@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+/* 🌈 EduBridge Design System - Tailwind v4 compatible
+   Clean minimal light theme + subtle gradients
+   Using only CSS vars (no config files needed)
+*/
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", "system-ui", sans-serif;
+}
+
+@layer base {
+  :root {
+    /* Light mode */
+    --background: 0 0% 99%;
+    --foreground: 220 20% 10%;
+
+    --primary: 220 90% 56%;
+    --primary-hover: 220 90% 50%;
+    --secondary: 220 15% 95%;
+    --accent: 200 80% 60%;
+    --muted: 220 10% 96%;
+    --border: 220 15% 90%;
+    --btn-primary: #111827;
+
+    --card-bg: 0 0% 100%;
+    --card-shadow: 0 4px 12px hsl(220 20% 10% / 0.04);
+
+    --gradient-blue: linear-gradient(135deg, hsl(220 90% 56%) 0%, hsl(250 80% 60%) 100%);
+    --gradient-soft: linear-gradient(180deg, hsl(0 0% 99%) 0%, hsl(220 20% 97%) 100%);
+
+    --neon-purple: 250 60% 91%;
+    --neon-cyan: 190 60% 88%;
+    --neon-pink: 330 60% 90%;
+    --neon-lime: 140 50% 88%;
+    --neon-orange: 25 70% 89%;
+  }
+
+  .dark {
+    /* Dark mode */
+    --background: 220 20% 10%;
+    --foreground: 220 10% 98%;
+    --primary: 220 90% 60%;
+    --secondary: 220 20% 18%;
+    --accent: 200 80% 65%;
+    --muted: 220 20% 16%;
+    --border: 220 20% 22%;
+    --card-bg: 220 20% 14%;
+    --card-shadow: 0 4px 12px hsl(220 10% 5% / 0.2);
+
+    --neon-purple: 250 60% 92%;
+    --neon-cyan: 190 60% 92%;
+    --neon-pink: 330 60% 92%;
+    --neon-lime: 140 50% 92%;
+
+    --neon-orange: 25 70% 92%;
+  }
+
+  body {
+    background:
+      radial-gradient(circle at 30% 25%,
+        hsl(220 85% 94%) 0%,
+        /* very light blue */
+        transparent 55%),
+      radial-gradient(circle at 70% 75%,
+        hsl(140 70% 90% / 0.45) 0%,
+        /* gentle lime accent */
+        transparent 60%),
+      radial-gradient(circle at 85% 40%,
+        hsl(220 75% 96% / 0.3) 0%,
+        /* faint supporting blue */
+        transparent 70%),
+      hsl(var(--background));
+    background-attachment: fixed;
+    color: hsl(var(--foreground));
+  }
+
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 60% 50%,
+        hsl(140 70% 88% / 0.08),
+        hsl(220 80% 92% / 0.1));
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--gradient-blue);
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    background: hsl(var(--primary));
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background: hsl(var(--primary-hover));
+  }
+
+  .card {
+    background: hsl(var(--card-bg));
+    box-shadow: var(--card-shadow);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+
+  .gradient-text {
+    background: var(--gradient-blue);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hover-float {
+    transition: all 0.3s ease;
+  }
+
+  .hover-float:hover {
+    transform: translateY(-4px);
+  }
+
+  .bg-neon-lime {
+    background-color: hsl(var(--neon-lime));
+  }
+
+  .bg-neon-purple {
+    background-color: hsl(var(--neon-purple));
+  }
+
+  .bg-neon-cyan {
+    background-color: hsl(var(--neon-cyan));
+  }
+
+  .bg-neon-pink {
+    background-color: hsl(var(--neon-pink));
+  }
+
+  .bg-neon-orange {
+    background-color: hsl(var(--neon-orange));
+  }
+}
+
+
+
+@keyframes owl-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: owl-float 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-bounce-slow {
+    animation: none;
+  }
+}
