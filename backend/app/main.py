@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-from app.db.supabase import supabase, supabase_admin
-from app.db.dependencies import get_access_token
+from app.db.supabase import supabase
 from app.api.advisor_api import router as advisor_router
 from app.api.recommendations_api import router as recommendations_router
 from app.api.what_if import router as what_if_router
@@ -12,12 +12,11 @@ from app.api.universities import router as universities_router
 app = FastAPI(
     title="Edubridge V2 API",
     version="2.0.0",
-    description="AI-powered university discovery and student guidance API"
+    description="AI-powered university discovery and student guidance API",
 )
 
 
 # CORS
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -31,9 +30,7 @@ app.add_middleware(
 )
 
 
-
-# Registering routers
-
+# Register routers
 app.include_router(advisor_router)
 app.include_router(recommendations_router)
 app.include_router(what_if_router)
@@ -42,85 +39,38 @@ app.include_router(universities_router)
 
 @app.get("/")
 def root():
-    return {
-        "message": "Edubridge V2 API is running"
-    }
-    
+    return {"message": "Edubridge V2 API is running"}
 
 
 @app.get("/health")
 def health_check():
     try:
-        universities = (
-            supabase
-            .table("universities")
-            .select("uni_id")
-            .limit(1)
-            .execute()
-        )
+        tables = [
+            ("universities", "uni_id"),
+            ("programs", "id"),
+            ("university_program_features", "feature_id"),
+            ("scholarships", "id"),
+        ]
 
-        programs = (
-            supabase
-            .table("programs")
-            .select("id")
-            .limit(1)
-            .execute()
-        )
-
-        features = (
-            supabase
-            .table("university_program_features")
-            .select("feature_id")
-            .limit(1)
-            .execute()
-        )
-
-        scholarships = (
-            supabase
-            .table("scholarships")
-            .select("id")
-            .limit(1)
-            .execute()
-        )
+        for table_name, column_name in tables:
+            (
+                supabase
+                .table(table_name)
+                .select(column_name)
+                .limit(1)
+                .execute()
+            )
 
         return {
             "status": "healthy",
             "database": "connected",
-            "universities": universities.data,
-            "programs": programs.data,
-            "features": features.data,
-            "scholarships": scholarships.data
         }
 
-    except Exception as e:
-        print("DATABASE ERROR:", repr(e))
-
-        return {
-            "status": "error",
-            "database": "failed",
-            "error": str(e)
-        }
-
-
-@app.get("/test-auth")
-def test_auth(token: str = Depends(get_access_token)):
-    return {
-        "message": "Token received successfully",
-        "token_length": len(token)
-    }
-    
-
-@app.get("/test-advisor-db")
-def test_advisor_db():
-    response = (
-        supabase_admin
-        .table("advisor_usage")
-        .select("message_count")
-        .limit(1)
-        .execute()
-    )
-
-    return {
-        "response": str(response),
-        "data": response.data if response else None,
-    }
+    except Exception:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "unhealthy",
+                "database": "unavailable",
+            },
+        )
